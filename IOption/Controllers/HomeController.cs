@@ -1,5 +1,6 @@
 ﻿using IOption.Models;
 using IOption.Models.ViewModels;
+using IOption.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -13,13 +14,16 @@ namespace IOption.Controllers
 {
     public class HomeController : Controller
     {
+        private IsmsServices _smsServices;
         private KavehNegarViewModel _kavehNegarViewModel;
         private PasargadViewModel _PasargadViewModel;
 
         public HomeController(
+            Func<SelectSmsPanel, IsmsServices> smsServices,
             IOptions<KavehNegarViewModel> kavehNegarOptions,
             IOptions<PasargadViewModel> pasargadOptions)
         {
+            _smsServices = smsServices(SelectSmsPanel.KavehNegar);
             _kavehNegarViewModel = kavehNegarOptions.Value;
             _PasargadViewModel = pasargadOptions.Value;
         }
@@ -33,6 +37,7 @@ namespace IOption.Controllers
 
         public IActionResult Privacy()
         {
+            ViewBag.KavehNegarSms = _smsServices.SendSms();
             return View();
         }
 

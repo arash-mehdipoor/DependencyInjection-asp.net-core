@@ -1,4 +1,6 @@
+using IOption.Models;
 using IOption.Models.ViewModels;
+using IOption.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,6 +27,22 @@ namespace IOption
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddScoped<KavehNegarService>();
+            services.AddScoped<ParsGreenNegarService>();
+            services.AddScoped<Func<SelectSmsPanel, IsmsServices>>(ServiceProvider => result =>
+            {
+                switch (result)
+                {
+                    case SelectSmsPanel.KavehNegar:
+                        return ServiceProvider.GetService<KavehNegarService>();
+                    case SelectSmsPanel.ParsGreen:
+                        return ServiceProvider.GetService<ParsGreenNegarService>();
+                    default:
+                        return ServiceProvider.GetService<KavehNegarService>();
+                }
+            });
+
             services.Configure<KavehNegarViewModel>(Configuration.GetSection("kavehNegarApi"));
             services.Configure<PasargadViewModel>(Configuration.GetSection("Pasargad"));
         }
