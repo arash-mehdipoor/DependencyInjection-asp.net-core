@@ -1,3 +1,4 @@
+using IOption.Models.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -24,6 +25,8 @@ namespace IOption
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.Configure<KavehNegarViewModel>(Configuration.GetSection("kavehNegarApi"));
+            services.Configure<PasargadViewModel>(Configuration.GetSection("Pasargad"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

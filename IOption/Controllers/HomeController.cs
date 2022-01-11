@@ -1,6 +1,8 @@
 ﻿using IOption.Models;
+using IOption.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,15 +13,21 @@ namespace IOption.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private KavehNegarViewModel _kavehNegarViewModel;
+        private PasargadViewModel _PasargadViewModel;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(
+            IOptions<KavehNegarViewModel> kavehNegarOptions,
+            IOptions<PasargadViewModel> pasargadOptions)
         {
-            _logger = logger;
+            _kavehNegarViewModel = kavehNegarOptions.Value;
+            _PasargadViewModel = pasargadOptions.Value;
         }
 
         public IActionResult Index()
         {
+            ViewBag.KavehNegar = _kavehNegarViewModel.Api;
+            ViewBag.Pasargad = _PasargadViewModel.TerminalId;
             return View();
         }
 
